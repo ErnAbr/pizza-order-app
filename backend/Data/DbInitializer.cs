@@ -36,9 +36,9 @@ namespace backend.Data
             {
                 var pizzaSizes = new List<PizzaSize>
                 {
-                    new() { Size = 8 },
-                    new() { Size = 10 },
-                    new() { Size = 12 },
+                    new() { SizeName= "small", SizePrice = 8 },
+                    new() { SizeName= "medium", SizePrice = 10 },
+                    new() { SizeName= "large", SizePrice = 12 },
                 };
 
                 context.PizzaSizes.AddRange(pizzaSizes);
