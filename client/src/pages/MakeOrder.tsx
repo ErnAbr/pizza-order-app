@@ -1,12 +1,31 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import agent from "../api/agent";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
-import { Container, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { PizzaData, PizzaSize, PizzaTopping } from "../models/pizzaData";
+import { LoginContext } from "../context/LoginContext";
 
 export default function MakeOrder() {
   const [pizzaData, setPizzaData] = useState<PizzaData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { isUser } = useContext(LoginContext);
+  const [selectedSize, setSelectedSize] = useState("");
+
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   let toppings: PizzaTopping[] = [];
   let sizes: PizzaSize[] = [];
@@ -24,7 +43,20 @@ export default function MakeOrder() {
     ({ toppings, sizes } = pizzaData);
   }
 
-  console.log(toppings);
+  const handleRadioChange = (event: any) => {
+    setSelectedSize(event.target.value);
+  };
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    const data = {
+      userName: isUser,
+      pizzaSizeId: parseInt(selectedSize),
+    };
+    console.log("Selected Pizza Size ID:", data);
+  };
+
+  // console.log(toppings);
   console.log(sizes);
 
   return (
@@ -44,20 +76,72 @@ export default function MakeOrder() {
       >
         Select Pizza Size And Toppings
       </Typography>
-      <Grid sx={{ justifyContent: "center", mt: "5vh" }} container spacing={3}>
-        {sizes.map((size) => (
-          <Grid
-            sx={{ mt: "15px", textAlign: "center" }}
-            item
-            xs={12}
-            md={12}
-            lg={3}
-            key={size.id}
-          >
-            {size.sizeName}
-          </Grid>
-        ))}
-      </Grid>
+      <Box sx={{ mt: "5vh" }}>
+        <form onSubmit={handleSubmit}>
+          <FormControl>
+            <FormLabel
+              sx={{
+                textAlign: "center",
+                mb: 3,
+                mr: 3,
+                color: "inherit",
+                "&.Mui-focused": {
+                  color: "inherit",
+                },
+              }}
+            >
+              Select Pizza Size
+            </FormLabel>
+            <RadioGroup
+              row
+              name="pizza-size-radio-group"
+              value={selectedSize}
+              onChange={handleRadioChange}
+            >
+              <Grid
+                container
+                spacing={5}
+                justifyContent="center"
+                alignItems="center"
+              >
+                {sizes.map((size) => (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={3}
+                    md={3}
+                    key={size.id}
+                    style={{ textAlign: isSmallScreen ? "center" : "inherit" }}
+                  >
+                    <label>
+                      <img
+                        src={`/images/${size.sizeName}.png`}
+                        alt={size.sizeName}
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                        }}
+                      />
+                      <FormControlLabel
+                        value={size.id.toString()}
+                        control={<Radio />}
+                        label={size.sizeName}
+                      />
+                    </label>
+                  </Grid>
+                ))}
+              </Grid>
+            </RadioGroup>
+            <Button
+              sx={{ width: "35%", alignSelf: "center", mt: 3, mr: 3 }}
+              type="submit"
+              variant="contained"
+            >
+              Submit
+            </Button>
+          </FormControl>
+        </form>
+      </Box>
     </Container>
   );
 }
