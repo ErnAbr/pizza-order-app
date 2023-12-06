@@ -35,18 +35,9 @@ namespace backend.Controllers
         [HttpPost("place-order")]
         public async Task<ActionResult<Order>> PlaceOrder(PizzaOrderDto orderDto)
         {
-             if (orderDto.ToppingIds.Count > 6)
-            {
-                return BadRequest("Incorrect topping amount");
-            }
-
             var pizzaSize = await _context.PizzaSizes.FindAsync(orderDto.PizzaSizeId);
-            if (pizzaSize == null)
-            {
-                return NotFound("Pizza size not found.");
-            }
-
             var toppings = new List<Topping>();
+
             foreach (var id in orderDto.ToppingIds)
             {
                 var topping = await _context.Toppings.FindAsync(id);
@@ -56,13 +47,7 @@ namespace backend.Controllers
                 }
             }
 
-            float basePrice = pizzaSize.SizePrice; 
-            float toppingPrice = toppings.Count * 1f; 
-            float totalPrice = basePrice + toppingPrice;
-              if (toppings.Count > 3) 
-            {
-                totalPrice -= totalPrice / 100 * 10;
-            }
+           float totalPrice = CalculatePrice(toppings.Count, pizzaSize.SizePrice);
 
             var order = new Order
             {
@@ -76,6 +61,19 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(order);
+        }
+
+        private static float CalculatePrice(int toppingsCount, int pizzaSize)
+        {
+            float basePrice = pizzaSize; 
+            float toppingPrice = toppingsCount * 1f; 
+            float totalPrice = basePrice + toppingPrice;
+              if (toppingsCount > 3) 
+            {
+                totalPrice -= totalPrice / 100 * 10;
+            }
+
+            return totalPrice;
         }
     }
 }
