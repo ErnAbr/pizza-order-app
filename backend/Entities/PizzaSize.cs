@@ -8,6 +8,7 @@ namespace backend.Entities
     public class PizzaSize
     {
         public int Id { get; set; }
-        public int Size { get; set; }
+        public string SizeName { get; set; }
+        public int SizePrice { get; set; }
     }
 }
