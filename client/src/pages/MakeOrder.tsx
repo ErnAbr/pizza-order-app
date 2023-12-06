@@ -79,19 +79,16 @@ export default function MakeOrder() {
       <Box sx={{ mt: "5vh" }}>
         <form onSubmit={handleSubmit}>
           <FormControl>
-            <FormLabel
+            <Typography
+              variant="h5"
               sx={{
                 textAlign: "center",
                 mb: 3,
                 mr: 3,
-                color: "inherit",
-                "&.Mui-focused": {
-                  color: "inherit",
-                },
               }}
             >
               Select Pizza Size
-            </FormLabel>
+            </Typography>
             <RadioGroup
               row
               name="pizza-size-radio-group"
@@ -113,7 +110,14 @@ export default function MakeOrder() {
                     key={size.id}
                     style={{ textAlign: isSmallScreen ? "center" : "inherit" }}
                   >
-                    <label>
+                    <label
+                      style={{
+                        display: isSmallScreen ? "flex" : "",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                      }}
+                    >
                       <img
                         src={`/images/${size.sizeName}.png`}
                         alt={size.sizeName}
@@ -124,8 +128,11 @@ export default function MakeOrder() {
                       />
                       <FormControlLabel
                         value={size.id.toString()}
+                        label={`${size.sizeName} $${size.sizePrice}`}
                         control={<Radio />}
-                        label={size.sizeName}
+                        style={{
+                          textAlign: isSmallScreen ? "center" : "inherit",
+                        }}
                       />
                     </label>
                   </Grid>
