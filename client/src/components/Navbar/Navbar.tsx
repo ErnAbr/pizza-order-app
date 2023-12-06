@@ -20,7 +20,7 @@ export default function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const user = true;
+  const user = false;
 
   const links = user
     ? [
@@ -28,7 +28,7 @@ export default function Navbar() {
         { title: "My Orders", path: "/my-orders" },
         { title: "Logout", path: "/logout" },
       ]
-    : [{ title: "Login", path: "https://www.google.lt" }];
+    : [{ title: "Login", path: "/" }];
 
   const drawer = (
     <Box onClick={() => setDrawerOpen(false)} sx={{ width: 250 }}>
