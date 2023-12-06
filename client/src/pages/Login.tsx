@@ -68,7 +68,7 @@ export default function Login() {
       >
         <TextField
           required
-          fullWidth
+          sx={{ width: "33vw", alignSelf: "center" }}
           label="Your Name"
           name="username"
           id="username"
@@ -77,7 +77,7 @@ export default function Login() {
         />
         <Button
           disabled={isUser != null}
-          sx={{ mt: 2, width: "33%", alignSelf: "center" }}
+          sx={{ mt: 2, width: "15vw", height: "50px", alignSelf: "center" }}
           variant="contained"
           type="submit"
         >
