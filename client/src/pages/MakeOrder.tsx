@@ -59,8 +59,7 @@ export default function MakeOrder() {
   useEffect(() => {
     if (orderData != null) {
       agent.Pizza.savePizzaOrder(orderData)
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
+      .catch((error) => console.log(error));
     }
   }, [orderData, navigate]);
 
