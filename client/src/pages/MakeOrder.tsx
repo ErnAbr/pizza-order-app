@@ -21,6 +21,7 @@ export default function MakeOrder() {
   const { isUser } = useContext(LoginContext);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedToppings, setSelectedToppings] = useState<number[]>([]);
+  const [pizzaPrice, setPizzaPrice] = useState<number>(0);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -37,9 +38,14 @@ export default function MakeOrder() {
 
   useEffect(() => {
     const size = parseInt(selectedSize);
-    if (!Number.isNaN(size) || selectedToppings.length != 0) {
-      console.log("selected size", size);
-      console.log("selected toppings", selectedToppings);
+    if (!Number.isNaN(size) && selectedToppings.length != 0) {
+      const pizzaPriceData = {
+        PizzaPrice: size,
+        ToppingIds: selectedToppings,
+      };
+      agent.Pizza.getPizzaPrice(pizzaPriceData)
+        .then((response) => setPizzaPrice(response))
+        .catch((error) => console.log(error));
     }
   }, [selectedSize, selectedToppings]);
 
@@ -74,7 +80,7 @@ export default function MakeOrder() {
     event.preventDefault();
     const data = {
       userName: isUser,
-      pizzaSizeId: parseInt(selectedSize),
+      PizzaPrice: parseInt(selectedSize),
       toppingIds: selectedToppings,
     };
     console.log("Selected Pizza Size ID:", data);
@@ -140,7 +146,7 @@ export default function MakeOrder() {
                 mr: 3,
               }}
             >
-              Total Price is: 11.5 $
+              Total Price is: {pizzaPrice} $
             </Typography>
             <Button
               sx={{ width: "35%", alignSelf: "center", mt: 3, mr: 3 }}

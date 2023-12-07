@@ -34,10 +34,9 @@ namespace backend.Controllers
 
         [HttpPost("place-order")]
         public async Task<ActionResult<Order>> PlaceOrder(PizzaOrderDto orderDto)
-        {
-            var pizzaSize = await _context.PizzaSizes.FindAsync(orderDto.PizzaSizeId);
+{
+            var pizzaSize = await _context.PizzaSizes.FirstOrDefaultAsync(ps => ps.SizePrice == orderDto.PizzaPrice);
             var toppings = new List<Topping>();
-
             foreach (var id in orderDto.ToppingIds)
             {
                 var topping = await _context.Toppings.FindAsync(id);
@@ -47,7 +46,7 @@ namespace backend.Controllers
                 }
             }
 
-           float totalPrice = CalculatePrice(toppings.Count, pizzaSize.SizePrice);
+            float totalPrice = CalculatePrice(toppings.Count, pizzaSize.SizePrice);
 
             var order = new Order
             {
@@ -61,6 +60,13 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(order);
+        }
+
+     [HttpPost("calculate-price")]
+        public async Task<float> ReturnPrice(PriceCalculationDto priceCalculationDto)
+        {
+            var calculatedPrice = CalculatePrice(priceCalculationDto.ToppingIds.Count, priceCalculationDto.PizzaPrice);
+            return await Task.FromResult(calculatedPrice);
         }
 
         private static float CalculatePrice(int toppingsCount, int pizzaSize)

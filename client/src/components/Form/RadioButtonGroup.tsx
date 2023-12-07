@@ -39,7 +39,7 @@ export default function RadioButtonGroup({
                 }}
               />
               <FormControlLabel
-                value={size.id.toString()}
+                value={size.sizePrice.toString()}
                 label={`${size.sizeName} $${size.sizePrice}`}
                 control={<Radio />}
               />
