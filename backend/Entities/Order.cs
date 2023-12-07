@@ -10,7 +10,7 @@ namespace backend.Entities
         public int Id { get; set; }
         public string UserName { get; set; }
         public PizzaSize PizzaSize { get; set; }
-        public List<Topping> Toppings { get; set; }
         public float TotalPrice { get; set; }
+        public ICollection<OrderTopping> OrderToppings { get; set; }
     }
 }

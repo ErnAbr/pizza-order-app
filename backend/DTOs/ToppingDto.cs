@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.Entities
+namespace backend.DTOs
 {
-    public class Topping
+    public class ToppingDto
     {
         public int Id { get; set; }
         public string ToppingName { get; set; }
-        public ICollection<OrderTopping> OrderToppings { get; set; }
     }
 }

@@ -14,16 +14,24 @@ import { PizzaData, PizzaSize, PizzaTopping } from "../models/pizzaData";
 import { LoginContext } from "../context/LoginContext";
 import RadioButtonGroup from "../components/Form/RadioButtonGroup";
 import CheckboxGroup from "../components/Form/CheckboxGroup";
+import Modal from "../components/Modal/Modal";
+import ModalContent from "../components/Modal/ModalContent";
+import { OrderData } from "../models/orderData";
+import { useNavigate } from "react-router-dom";
 
 export default function MakeOrder() {
   const [pizzaData, setPizzaData] = useState<PizzaData | null>(null);
   const [loading, setLoading] = useState(true);
-  const { isUser } = useContext(LoginContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedToppings, setSelectedToppings] = useState<number[]>([]);
+  const [pizzaPrice, setPizzaPrice] = useState<number>(0);
+  const [orderData, setOrderData] = useState<OrderData | null>(null);
+  const { isUser } = useContext(LoginContext);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const navigate = useNavigate();
 
   let toppings: PizzaTopping[] = [];
   let sizes: PizzaSize[] = [];
@@ -37,11 +45,23 @@ export default function MakeOrder() {
 
   useEffect(() => {
     const size = parseInt(selectedSize);
-    if (!Number.isNaN(size) || selectedToppings.length != 0) {
-      console.log("selected size", size);
-      console.log("selected toppings", selectedToppings);
+    if (!Number.isNaN(size) && selectedToppings.length != 0) {
+      const pizzaPriceData = {
+        PizzaPrice: size,
+        ToppingIds: selectedToppings,
+      };
+      agent.Pizza.getPizzaPrice(pizzaPriceData)
+        .then((response) => setPizzaPrice(response))
+        .catch((error) => console.log(error));
     }
   }, [selectedSize, selectedToppings]);
+
+  useEffect(() => {
+    if (orderData != null) {
+      agent.Pizza.savePizzaOrder(orderData)
+      .catch((error) => console.log(error));
+    }
+  }, [orderData, navigate]);
 
   if (loading) return <LoadingComponent message="Loading Pizza Data" />;
 
@@ -70,14 +90,20 @@ export default function MakeOrder() {
     });
   };
 
+  const handleSubmitVerification = (event: any) => {
+    event.preventDefault();
+    setIsModalOpen(true);
+  };
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const data = {
       userName: isUser,
-      pizzaSizeId: parseInt(selectedSize),
+      pizzaPrice: parseInt(selectedSize),
       toppingIds: selectedToppings,
     };
-    console.log("Selected Pizza Size ID:", data);
+    setOrderData(data);
+    setIsModalOpen(false);
   };
 
   return (
@@ -98,7 +124,7 @@ export default function MakeOrder() {
         Make An Order For Your Pizza
       </Typography>
       <Box sx={{ mt: "5vh" }}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmitVerification}>
           <FormControl>
             <Typography
               variant="h5"
@@ -140,7 +166,7 @@ export default function MakeOrder() {
                 mr: 3,
               }}
             >
-              Total Price is: 11.5 $
+              Total Price is: {pizzaPrice} $
             </Typography>
             <Button
               sx={{ width: "35%", alignSelf: "center", mt: 3, mr: 3 }}
@@ -153,6 +179,16 @@ export default function MakeOrder() {
           </FormControl>
         </form>
       </Box>
+      {isModalOpen && (
+        <>
+          <Modal closeModal={() => setIsModalOpen(false)}>
+            <ModalContent
+              handleSubmit={handleSubmit}
+              setIsModalOpen={setIsModalOpen}
+            />
+          </Modal>
+        </>
+      )}
     </Container>
   );
 }

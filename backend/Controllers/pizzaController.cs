@@ -32,35 +32,70 @@ namespace backend.Controllers
             return Ok(result);
         }
 
+        [HttpGet("get-order-details/{userName}")]
+        public async Task<IActionResult> GetOrderDetails(string userName)
+        {
+            var orders = await _context.Orders
+                                        .Where(order => order.UserName == userName)
+                                        .Include(order => order.PizzaSize)
+                                        .Include(order => order.OrderToppings)
+                                            .ThenInclude(ot => ot.Topping)
+                                        .ToListAsync();
+
+            var orderDtos = orders.Select(o => new OrderDto
+            {
+                Id = o.Id,
+                UserName = o.UserName,
+                PizzaSize = new PizzaSizeDto
+                {
+                    SizeName = o.PizzaSize.SizeName,
+                },
+                TotalPrice = o.TotalPrice,
+                Toppings = o.OrderToppings.Select(ot => new ToppingDto
+                {
+                    Id = ot.Topping.Id,
+                    ToppingName = ot.Topping.ToppingName
+                }).ToList()
+            }).ToList();
+
+            return Ok(orderDtos);
+        }
+
         [HttpPost("place-order")]
         public async Task<ActionResult<Order>> PlaceOrder(PizzaOrderDto orderDto)
         {
-            var pizzaSize = await _context.PizzaSizes.FindAsync(orderDto.PizzaSizeId);
-            var toppings = new List<Topping>();
-
-            foreach (var id in orderDto.ToppingIds)
-            {
-                var topping = await _context.Toppings.FindAsync(id);
-                if (topping != null)
-                {
-                    toppings.Add(topping);
-                }
-            }
-
-           float totalPrice = CalculatePrice(toppings.Count, pizzaSize.SizePrice);
+            var pizzaSize = await _context.PizzaSizes.FirstOrDefaultAsync(ps => ps.SizePrice == orderDto.PizzaPrice);
 
             var order = new Order
             {
                 UserName = orderDto.UserName,
                 PizzaSize = pizzaSize,
-                Toppings = toppings,
-                TotalPrice = totalPrice
+                OrderToppings = new List<OrderTopping>(),
             };
+
+            foreach (var toppingId in orderDto.ToppingIds)
+            {
+                var topping = await _context.Toppings.FindAsync(toppingId);
+                if (topping != null)
+                {
+                    order.OrderToppings.Add(new OrderTopping { ToppingId = toppingId, Order = order });
+                }
+            }
+
+            float totalPrice = CalculatePrice(order.OrderToppings.Count, pizzaSize.SizePrice);
+            order.TotalPrice = totalPrice;
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            return Ok(order);
+            return Ok();
+        }
+
+     [HttpPost("calculate-price")]
+        public async Task<float> ReturnPrice(PriceCalculationDto priceCalculationDto)
+        {
+            var calculatedPrice = CalculatePrice(priceCalculationDto.ToppingIds.Count, priceCalculationDto.PizzaPrice);
+            return await Task.FromResult(calculatedPrice);
         }
 
         private static float CalculatePrice(int toppingsCount, int pizzaSize)

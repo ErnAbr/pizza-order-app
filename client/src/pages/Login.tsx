@@ -22,7 +22,7 @@ export default function Login() {
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    localStorage.setItem("userName", JSON.stringify(userName.toLowerCase()));
+    localStorage.setItem("userName", userName.toLowerCase());
     setIsUser(localStorage.getItem("userName"));
     setUserName("");
     navigate("/order-pizza");
