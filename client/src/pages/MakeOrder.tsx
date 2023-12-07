@@ -6,23 +6,21 @@ import {
   Button,
   Container,
   FormControl,
-  FormControlLabel,
-  FormLabel,
-  Grid,
-  Radio,
-  RadioGroup,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { PizzaData, PizzaSize, PizzaTopping } from "../models/pizzaData";
 import { LoginContext } from "../context/LoginContext";
+import RadioButtonGroup from "../components/Form/RadioButtonGroup";
+import CheckboxGroup from "../components/Form/CheckboxGroup";
 
 export default function MakeOrder() {
   const [pizzaData, setPizzaData] = useState<PizzaData | null>(null);
   const [loading, setLoading] = useState(true);
   const { isUser } = useContext(LoginContext);
   const [selectedSize, setSelectedSize] = useState("");
+  const [selectedToppings, setSelectedToppings] = useState<number[]>([]);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -37,6 +35,14 @@ export default function MakeOrder() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    const size = parseInt(selectedSize);
+    if (!Number.isNaN(size) || selectedToppings.length != 0) {
+      console.log("selected size", size);
+      console.log("selected toppings", selectedToppings);
+    }
+  }, [selectedSize, selectedToppings]);
+
   if (loading) return <LoadingComponent message="Loading Pizza Data" />;
 
   if (pizzaData) {
@@ -47,17 +53,32 @@ export default function MakeOrder() {
     setSelectedSize(event.target.value);
   };
 
+  const handleToppingChange = (event: any) => {
+    const toppingId = parseInt(event.target.value);
+    setSelectedToppings((currentSelectedToppings) => {
+      const isToppingSelected = currentSelectedToppings.includes(toppingId);
+      if (isToppingSelected) {
+        return currentSelectedToppings.filter((id) => id !== toppingId);
+      } else {
+        if (currentSelectedToppings.length < 6) {
+          return [...currentSelectedToppings, toppingId];
+        } else {
+          alert("You can only select up to 6 toppings.");
+          return currentSelectedToppings;
+        }
+      }
+    });
+  };
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const data = {
       userName: isUser,
       pizzaSizeId: parseInt(selectedSize),
+      toppingIds: selectedToppings,
     };
     console.log("Selected Pizza Size ID:", data);
   };
-
-  // console.log(toppings);
-  console.log(sizes);
 
   return (
     <Container
@@ -74,68 +95,58 @@ export default function MakeOrder() {
         mt={2}
         variant="h4"
       >
-        Select Pizza Size And Toppings
+        Make An Order For Your Pizza
       </Typography>
       <Box sx={{ mt: "5vh" }}>
         <form onSubmit={handleSubmit}>
           <FormControl>
-            <FormLabel
+            <Typography
+              variant="h5"
               sx={{
                 textAlign: "center",
                 mb: 3,
                 mr: 3,
-                color: "inherit",
-                "&.Mui-focused": {
-                  color: "inherit",
-                },
               }}
             >
-              Select Pizza Size
-            </FormLabel>
-            <RadioGroup
-              row
-              name="pizza-size-radio-group"
-              value={selectedSize}
-              onChange={handleRadioChange}
+              Select Pizza Size and up to 6 Toppings
+            </Typography>
+            <Box display="flex">
+              <RadioButtonGroup
+                selectedSize={selectedSize}
+                handleRadioChange={handleRadioChange}
+                sizes={sizes}
+              />
+              <CheckboxGroup
+                toppings={toppings}
+                isSmallScreen={isSmallScreen}
+                selectedToppings={selectedToppings}
+                handleToppingChange={handleToppingChange}
+              />
+            </Box>
+            <Typography
+              sx={{
+                textAlign: "center",
+                mt: 3,
+                mr: 3,
+              }}
             >
-              <Grid
-                container
-                spacing={5}
-                justifyContent="center"
-                alignItems="center"
-              >
-                {sizes.map((size) => (
-                  <Grid
-                    item
-                    xs={12}
-                    sm={3}
-                    md={3}
-                    key={size.id}
-                    style={{ textAlign: isSmallScreen ? "center" : "inherit" }}
-                  >
-                    <label>
-                      <img
-                        src={`/images/${size.sizeName}.png`}
-                        alt={size.sizeName}
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                        }}
-                      />
-                      <FormControlLabel
-                        value={size.id.toString()}
-                        control={<Radio />}
-                        label={size.sizeName}
-                      />
-                    </label>
-                  </Grid>
-                ))}
-              </Grid>
-            </RadioGroup>
+              Select more then 3 toppings and get -10% Discount!
+            </Typography>
+            <Typography
+              sx={{
+                textAlign: "end",
+                fontWeight: "bolder",
+                mt: 1,
+                mr: 3,
+              }}
+            >
+              Total Price is: 11.5 $
+            </Typography>
             <Button
               sx={{ width: "35%", alignSelf: "center", mt: 3, mr: 3 }}
               type="submit"
               variant="contained"
+              disabled={selectedSize === "" || selectedToppings.length === 0}
             >
               Submit
             </Button>

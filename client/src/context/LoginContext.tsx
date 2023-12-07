@@ -23,7 +23,7 @@ export const LoginProvider = ({ children }: Props) => {
   useEffect(() => {
     const storedUser = localStorage.getItem("userName");
     if (storedUser) {
-      setIsUser(storedUser);
+      setIsUser(JSON.parse(storedUser));
     }
   }, []);
 
