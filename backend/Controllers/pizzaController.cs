@@ -32,6 +32,23 @@ namespace backend.Controllers
             return Ok(result);
         }
 
+        [HttpGet("get-order-details/{userName}")]
+        public async Task<IActionResult> GetOrderDetails(string userName)
+        {
+            var orders = await _context.Orders
+                                    .Where(order => order.UserName == userName)
+                                    .Include(order => order.PizzaSize) // Include PizzaSize
+                                    .Include(order => order.Toppings)  // Include Toppings
+                                    .ToListAsync();
+
+            if (orders == null || orders.Count == 0)
+            {
+                return NotFound("No orders found for the specified user.");
+            }
+
+            return Ok(orders);
+        }
+
         [HttpPost("place-order")]
         public async Task<ActionResult<Order>> PlaceOrder(PizzaOrderDto orderDto)
 {

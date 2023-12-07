@@ -12,6 +12,7 @@ const requests = {
 const Pizza = {
   getPizzaData: () => requests.get("pizza-data"),
   getPizzaPrice: (values: any) => requests.post("calculate-price", values),
+  savePizzaOrder: (values: any) => requests.post("place-order", values),
 };
 
 const agent = {
