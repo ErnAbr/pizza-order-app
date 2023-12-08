@@ -91,11 +91,27 @@ namespace backend.Controllers
             return Ok();
         }
 
-     [HttpPost("calculate-price")]
+        [HttpPost("calculate-price")]
         public async Task<float> ReturnPrice(PriceCalculationDto priceCalculationDto)
         {
             var calculatedPrice = CalculatePrice(priceCalculationDto.ToppingIds.Count, priceCalculationDto.PizzaPrice);
             return await Task.FromResult(calculatedPrice);
+        }
+
+        [HttpDelete("delete-order")]
+        public async Task<IActionResult> DeleteOrder([FromQuery] string userName, int id)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.UserName == userName && o.Id == id);
+
+            if (order == null)
+            {
+            return NotFound();
+            }
+
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         private static float CalculatePrice(int toppingsCount, int pizzaSize)
