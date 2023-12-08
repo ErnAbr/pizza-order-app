@@ -65,7 +65,7 @@ export default function MyOrders() {
                 </TableCell>
                 <TableCell
                   sx={{ fontWeight: "bold", fontSize: "larger" }}
-                  align="right"
+                  align="center"
                 >
                   Total Price
                 </TableCell>
