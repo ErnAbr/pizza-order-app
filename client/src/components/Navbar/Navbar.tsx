@@ -39,7 +39,7 @@ export default function Navbar() {
     : [{ title: "Login", path: "/" }];
 
   const drawer = (
-    <Box onClick={() => setDrawerOpen(false)} sx={{ width: 250 }}>
+    <Box onClick={() => setDrawerOpen(false)} sx={{ width: 200 }}>
       <Stack
         direction="column"
         alignItems="flex-start"
