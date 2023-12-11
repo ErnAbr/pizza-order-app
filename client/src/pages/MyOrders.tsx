@@ -15,7 +15,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { capitalizeFirstLetter } from "../components/Utils/capitalizeFirstLetter";
+import { capitalizeFirstLetter } from "../Utils/capitalizeFirstLetter";
 
 export default function MyOrders() {
   const [myOrders, setMyOrders] = useState<MyOrder[]>([]);
