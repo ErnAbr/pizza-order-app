@@ -1,6 +1,7 @@
 import { CssBaseline } from "@mui/material";
 import Header from "./components/Navbar/Navbar";
 import { Outlet } from "react-router-dom";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <CssBaseline />
       <Header />
       <Outlet />
+      <Footer />
     </>
   );
 }
