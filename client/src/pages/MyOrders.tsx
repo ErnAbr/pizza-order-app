@@ -63,7 +63,7 @@ export default function MyOrders() {
         <TableContainer
           sx={{
             mt: 3,
-            maxWidth: "100%",
+            maxWidth: "75%",
             overflowX: "auto",
           }}
           component={Paper}
