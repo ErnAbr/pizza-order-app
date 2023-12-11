@@ -1,4 +1,4 @@
-import { CssBaseline } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import Header from "./components/Navbar/Navbar";
 import { Outlet } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
@@ -8,8 +8,10 @@ function App() {
     <>
       <CssBaseline />
       <Header />
-      <Outlet />
-      <Footer />
+      <Box sx={{ display: "flex", flexDirection: "column", minHeight: "90vh" }}>
+        <Outlet />
+        <Footer />
+      </Box>
     </>
   );
 }
