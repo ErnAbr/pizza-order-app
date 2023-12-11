@@ -12,6 +12,7 @@ export default function Footer() {
           sm: "1rem",
           md: "1.3rem",
         },
+        mt: "auto",
       }}
       variant="h6"
     >

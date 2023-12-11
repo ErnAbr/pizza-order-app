@@ -9,7 +9,7 @@ export default function ModalContent({ setIsModalOpen, handleSubmit }: Props) {
   return (
     <>
       <Typography mb={2}>
-        Order Accepted, Do You Wish To Save Your Order?
+        Order Accepted! Do You Wish To Save Your Order?
       </Typography>
       <Box display="flex" gap={2}>
         <Button
