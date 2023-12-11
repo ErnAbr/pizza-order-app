@@ -1,5 +1,6 @@
 import { RadioGroup, Grid, FormControlLabel, Radio } from "@mui/material";
 import { PizzaSize } from "../../models/pizzaData";
+import "./radioButtonGroup.css";
 
 interface Props {
   selectedSize: string;
@@ -33,10 +34,7 @@ export default function RadioButtonGroup({
               <img
                 src={`/images/${size.sizeName}.png`}
                 alt={size.sizeName}
-                style={{
-                  width: "100px",
-                  height: "100px",
-                }}
+                className="img-responsive"
               />
               <FormControlLabel
                 value={size.sizePrice.toString()}

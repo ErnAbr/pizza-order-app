@@ -1,0 +1,11 @@
+.img-responsive {
+  width: 75%;
+  height: 75%;
+}
+
+@media (max-width: 600px) {
+  .img-responsive {
+    width: 50%;
+    height: 50%;
+  }
+}

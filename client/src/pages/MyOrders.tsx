@@ -47,11 +47,28 @@ export default function MyOrders() {
   if (myOrders.length > 0) {
     return (
       <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
-        <Typography sx={{ mt: 3 }} variant="h3">
+        <Typography
+          sx={{
+            mt: 3,
+            fontSize: {
+              xs: "1.5rem",
+              sm: "2.5rem",
+              md: "3rem",
+            },
+          }}
+          variant="h3"
+        >
           Your Orders
         </Typography>
-        <TableContainer sx={{ mt: 3, width: 1028 }} component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableContainer
+          sx={{
+            mt: 3,
+            maxWidth: "100%",
+            overflowX: "auto",
+          }}
+          component={Paper}
+        >
+          <Table sx={{ minWidth: 650 }}>
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }}>
@@ -107,7 +124,18 @@ export default function MyOrders() {
   }
 
   return (
-    <Typography sx={{ mt: 3, textAlign: "center" }} variant="h3">
+    <Typography
+      sx={{
+        mt: 3,
+        textAlign: "center",
+        fontSize: {
+          xs: "1.5rem",
+          sm: "2.5rem",
+          md: "3rem",
+        },
+      }}
+      variant="h3"
+    >
       No Orders Found
     </Typography>
   );
