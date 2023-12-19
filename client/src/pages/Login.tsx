@@ -35,11 +35,9 @@ export default function Login() {
   type TypographyVariant = TypographyProps["variant"];
   let variant: TypographyVariant = "h3";
 
-  if (Xs) {
-    variant = "h6";
-  } else if (Sm) {
-    variant = "h4";
-  }
+  variant = Xs ? "h6" : Sm ? "h4" : "h3";
+  const textFieldWidth = Xs ? "70vw" : Sm ? "50vw" : "33vw";
+  const buttonWidth = Xs ? "60vw" : Sm ? "30vw" : "15vw";
 
   return (
     <Container
@@ -68,7 +66,7 @@ export default function Login() {
       >
         <TextField
           required
-          sx={{ width: "33vw", alignSelf: "center" }}
+          sx={{ width: textFieldWidth, alignSelf: "center" }}
           label="Your Name"
           name="username"
           id="username"
@@ -77,7 +75,12 @@ export default function Login() {
         />
         <Button
           disabled={isUser != null}
-          sx={{ mt: 2, width: "15vw", height: "50px", alignSelf: "center" }}
+          sx={{
+            mt: 2,
+            width: buttonWidth,
+            height: "50px",
+            alignSelf: "center",
+          }}
           variant="contained"
           type="submit"
         >
