@@ -35,7 +35,7 @@ export default function MakeOrder() {
 
   useEffect(() => {
     const size = parseInt(selectedSize);
-    if (!Number.isNaN(size) || toppingCount.length != 0) {
+    if (!Number.isNaN(size) && toppingCount.length != 0) {
       const pizzaPriceData = {
         PizzaPrice: size,
         ToppingIds: toppingCount,

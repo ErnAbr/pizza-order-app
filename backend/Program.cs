@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<PizzaContext>(options =>
-options.UseInMemoryDatabase("PizzaDatabase"));
+    options.UseInMemoryDatabase("PizzaDatabase"));
 
 builder.Services.AddCors();
 
@@ -24,6 +24,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseCors(opt =>
 {
     opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3005");
@@ -34,6 +37,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapFallbackToController("Index", "Fallback");
 
 using (var scope = app.Services.CreateScope())
 {
