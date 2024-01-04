@@ -7,7 +7,7 @@ namespace backend.DTOs
 {
     public class PriceCalculationDto
     {
-    public int PizzaPrice { get; set; }
-    public List<int> ToppingIds { get; set; }
+        public int PizzaSizeId  { get; set; }
+        public List<int> ToppingIds { get; set; }
     }
 }

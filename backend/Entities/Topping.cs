@@ -9,6 +9,6 @@ namespace backend.Entities
     {
         public int Id { get; set; }
         public string ToppingName { get; set; }
-        public ICollection<OrderTopping> OrderToppings { get; set; }
+        public ICollection<OrderTopping> OrderTopping { get; set; }
     }
 }
