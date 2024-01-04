@@ -99,22 +99,43 @@ export default function MakeOrder() {
       <Box sx={{ mt: "5vh" }}>
         <form onSubmit={handleSubmitVerification}>
           <FormControl>
-            <Typography
-              variant="h5"
-              sx={{
-                textAlign: "center",
-                mb: 3,
-                mr: 3,
-              }}
-            >
-              Select Pizza Size and up to 6 Toppings
-            </Typography>
+            {currentStep === 0 ? (
+              <Typography
+                variant="h5"
+                sx={{
+                  textAlign: "center",
+                  mb: 3,
+                  mr: 3,
+                }}
+              >
+                Select Pizza Size
+              </Typography>
+            ) : (
+              <Typography
+                variant="h5"
+                sx={{
+                  textAlign: "center",
+                  mb: 3,
+                  mr: 3,
+                }}
+              >
+                Select up to 6 Toppings
+              </Typography>
+            )}
+
             <Box display="flex" flexDirection="column">
               {currentStep === 0 && (
                 <RadioButtonGroup selectedSize={selectedSize} handleRadioChange={handleRadioChange} sizes={sizes} />
               )}
 
-              {currentStep === 1 && <ToppingsTable selectedToppings={selectedToppings} setSelectedToppings={setSelectedToppings} toppings={toppings} setToppingCount={setToppingCount} />}
+              {currentStep === 1 && (
+                <ToppingsTable
+                  selectedToppings={selectedToppings}
+                  setSelectedToppings={setSelectedToppings}
+                  toppings={toppings}
+                  setToppingCount={setToppingCount}
+                />
+              )}
             </Box>
             <Typography
               sx={{
