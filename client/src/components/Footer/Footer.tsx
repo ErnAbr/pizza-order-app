@@ -5,12 +5,11 @@ export default function Footer() {
     <Typography
       sx={{
         textAlign: "end",
-        padding: 5,
+        padding: 2,
         fontWeight: "bolder",
         fontSize: {
           xs: "0.75rem",
           sm: "1rem",
-          md: "1.3rem",
         },
         mt: "auto",
       }}

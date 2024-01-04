@@ -22,7 +22,7 @@ export default function RadioButtonGroup({
     >
       <Grid container spacing={3} justifyContent="center" alignItems="center">
         {sizes.map((size) => (
-          <Grid item xs={12} sm={3} md={4} key={size.id}>
+          <Grid item xs={12} sm={4} md={4} key={size.id}>
             <label
               style={{
                 display: "flex",
