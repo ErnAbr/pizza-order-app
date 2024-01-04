@@ -19,6 +19,8 @@ export default function MakeOrder() {
   const [toppingCount, setToppingCount] = useState<number[]>([]);
   const [pizzaPrice, setPizzaPrice] = useState<number>(0);
   const [orderData, setOrderData] = useState<OrderData | null>(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [selectedToppings, setSelectedToppings] = useState<number[]>([]);
   const { isUser } = useContext(LoginContext);
 
   const navigate = useNavigate();
@@ -35,9 +37,9 @@ export default function MakeOrder() {
 
   useEffect(() => {
     const size = parseInt(selectedSize);
-    if (!Number.isNaN(size) && toppingCount.length != 0) {
+    if (!Number.isNaN(size) || toppingCount.length != 0) {
       const pizzaPriceData = {
-        pizzaSizeId : size,
+        pizzaSizeId: size,
         ToppingIds: toppingCount,
       };
       agent.Pizza.getPizzaPrice(pizzaPriceData)
@@ -87,15 +89,11 @@ export default function MakeOrder() {
         justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
-        marginTop: "7vh",
+        marginTop: "2vh",
         marginBottom: "15px",
       }}
     >
-      <Typography
-        sx={{ textAlign: "center", fontWeight: "bold" }}
-        mt={2}
-        variant="h4"
-      >
+      <Typography sx={{ textAlign: "center", fontWeight: "bold" }} variant="h4">
         Make An Order For Your Pizza
       </Typography>
       <Box sx={{ mt: "5vh" }}>
@@ -112,15 +110,11 @@ export default function MakeOrder() {
               Select Pizza Size and up to 6 Toppings
             </Typography>
             <Box display="flex" flexDirection="column">
-              <RadioButtonGroup
-                selectedSize={selectedSize}
-                handleRadioChange={handleRadioChange}
-                sizes={sizes}
-              />
-              <ToppingsTable
-                toppings={toppings}
-                setToppingCount={setToppingCount}
-              />
+              {currentStep === 0 && (
+                <RadioButtonGroup selectedSize={selectedSize} handleRadioChange={handleRadioChange} sizes={sizes} />
+              )}
+
+              {currentStep === 1 && <ToppingsTable selectedToppings={selectedToppings} setSelectedToppings={setSelectedToppings} toppings={toppings} setToppingCount={setToppingCount} />}
             </Box>
             <Typography
               sx={{
@@ -138,27 +132,54 @@ export default function MakeOrder() {
                 mt: 1,
                 mr: 3,
               }}
+            ></Typography>
+            {currentStep === 0 && (
+              <Button
+                sx={{ width: "100px", alignSelf: "center", mt: 3, mr: 3 }}
+                variant="contained"
+                onClick={() => setCurrentStep(1)}
+                disabled={selectedSize === ""}
+              >
+                Next
+              </Button>
+            )}
+            {currentStep === 1 && (
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Button
+                  sx={{ width: "100px", alignSelf: "center", mt: 3, mr: 3 }}
+                  variant="contained"
+                  color="warning"
+                  onClick={() => setCurrentStep(0)}
+                >
+                  Previous
+                </Button>
+                <Button
+                  sx={{ width: "100px", alignSelf: "center", mt: 3, mr: 3 }}
+                  type="submit"
+                  variant="contained"
+                  disabled={selectedSize === "" || toppingCount.length === 0}
+                >
+                  Submit
+                </Button>
+              </Box>
+            )}
+            <Typography
+              sx={{
+                textAlign: "end",
+                fontWeight: "bolder",
+                mt: 3,
+                mr: 3,
+              }}
             >
               Total Price is: {pizzaPrice} $
             </Typography>
-            <Button
-              sx={{ width: "35%", alignSelf: "center", mt: 3, mr: 3 }}
-              type="submit"
-              variant="contained"
-              disabled={selectedSize === "" || toppingCount.length === 0}
-            >
-              Submit
-            </Button>
           </FormControl>
         </form>
       </Box>
       {isModalOpen && (
         <>
           <Modal closeModal={() => setIsModalOpen(false)}>
-            <ModalContent
-              handleSubmit={handleSubmit}
-              setIsModalOpen={setIsModalOpen}
-            />
+            <ModalContent handleSubmit={handleSubmit} setIsModalOpen={setIsModalOpen} />
           </Modal>
         </>
       )}

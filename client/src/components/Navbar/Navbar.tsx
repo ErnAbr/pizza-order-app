@@ -77,7 +77,6 @@ export default function Navbar() {
           </IconButton>
           <Typography
             variant="h6"
-            component="div"
             sx={{ flexGrow: 1, fontWeight: "bold" }}
           >
             Pizza Order App
@@ -128,7 +127,7 @@ export default function Navbar() {
         onClose={() => setDrawerOpen(false)}
         sx={{
           "& .MuiDrawer-paper": {
-            backgroundColor: "#9C27B0", // Or use any color value you prefer
+            backgroundColor: "#9C27B0",
           },
         }}
       >

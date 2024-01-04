@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { MyOrder } from "../models/myOrdersData";
+import { MyOrder } from "../models/myOrder";
 import agent from "../api/agent";
 import { LoginContext } from "../context/LoginContext";
 import LoadingComponent from "../components/LoadingComponent/LoadingComponent";
