@@ -36,15 +36,13 @@ export default function MyOrders() {
 
   const deleteOrder = (id: number, userName: string) => {
     agent.Pizza.deleteUserOrder(userName, id)
-      .then(() =>
-        setMyOrders((prevOrders) =>
-          prevOrders.filter((order) => order.id !== id)
-        )
-      )
+      .then(() => setMyOrders((prevOrders) => prevOrders.filter((order) => order.id !== id)))
       .catch((error) => console.log(error));
   };
 
   if (myOrders.length > 0) {
+    console.log(myOrders);
+
     return (
       <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
         <Typography
@@ -71,25 +69,14 @@ export default function MyOrders() {
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }}>
-                  Pizza Size
-                </TableCell>
-                <TableCell
-                  sx={{ fontWeight: "bold", fontSize: "larger" }}
-                  align="center"
-                >
+                <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }}>Pizza Size</TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
                   Toppings
                 </TableCell>
-                <TableCell
-                  sx={{ fontWeight: "bold", fontSize: "larger" }}
-                  align="center"
-                >
+                <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
                   Total Price
                 </TableCell>
-                <TableCell
-                  sx={{ fontWeight: "bold", fontSize: "larger" }}
-                  align="center"
-                >
+                <TableCell sx={{ fontWeight: "bold", fontSize: "larger" }} align="center">
                   Delete
                 </TableCell>
               </TableRow>
@@ -98,19 +85,12 @@ export default function MyOrders() {
               {myOrders.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell component="th" scope="row">
-                    {capitalizeFirstLetter(order.pizzaSize.sizeName)}
+                    {capitalizeFirstLetter(order.sizeName)}
                   </TableCell>
-                  <TableCell align="center">
-                    {order.toppings
-                      .map((topping) => topping.toppingName)
-                      .join(", ")}
-                  </TableCell>
+                  <TableCell align="center">{order.toppings.map((topping) => topping).join(", ")}</TableCell>
                   <TableCell align="center">{order.totalPrice} $</TableCell>
                   <TableCell align="center">
-                    <Button
-                      onClick={() => deleteOrder(order.id, order.userName)}
-                      variant="contained"
-                    >
+                    <Button onClick={() => deleteOrder(order.id, order.userName)} variant="contained">
                       Delete
                     </Button>
                   </TableCell>

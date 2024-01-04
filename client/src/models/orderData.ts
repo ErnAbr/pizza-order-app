@@ -1,5 +1,5 @@
 export interface OrderData {
   userName: string | null;
-  pizzaPrice: number;
+  pizzaSizeId: number;
   toppingIds: number[];
 }

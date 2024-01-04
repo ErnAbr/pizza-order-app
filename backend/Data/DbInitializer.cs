@@ -10,10 +10,8 @@ namespace backend.Data
     {
         public static void Initialize(PizzaContext context)
         {
-            // Ensure the database is created
             context.Database.EnsureCreated();
 
-            // Check if the Toppings table is empty
             if (!context.Toppings.Any())
             {
                 var toppings = new List<Topping>
@@ -31,7 +29,6 @@ namespace backend.Data
                 context.Toppings.AddRange(toppings);
             }
 
-            // Check if the PizzaSizes table is empty
             if (!context.PizzaSizes.Any())
             {
                 var pizzaSizes = new List<PizzaSize>
@@ -44,7 +41,6 @@ namespace backend.Data
                 context.PizzaSizes.AddRange(pizzaSizes);
             }
 
-            // Save changes to the database
             context.SaveChanges();
         }
     }

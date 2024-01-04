@@ -37,7 +37,7 @@ export default function RadioButtonGroup({
                 className="img-responsive"
               />
               <FormControlLabel
-                value={size.sizePrice.toString()}
+                value={size.id.toString()}
                 label={`${size.sizeName} $${size.sizePrice}`}
                 control={<Radio />}
               />

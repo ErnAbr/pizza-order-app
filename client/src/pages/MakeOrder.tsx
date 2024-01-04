@@ -37,7 +37,7 @@ export default function MakeOrder() {
     const size = parseInt(selectedSize);
     if (!Number.isNaN(size) && toppingCount.length != 0) {
       const pizzaPriceData = {
-        PizzaPrice: size,
+        pizzaSizeId : size,
         ToppingIds: toppingCount,
       };
       agent.Pizza.getPizzaPrice(pizzaPriceData)
@@ -73,7 +73,7 @@ export default function MakeOrder() {
     event.preventDefault();
     const data = {
       userName: isUser,
-      pizzaPrice: parseInt(selectedSize),
+      pizzaSizeId: parseInt(selectedSize),
       toppingIds: toppingCount,
     };
     setOrderData(data);
