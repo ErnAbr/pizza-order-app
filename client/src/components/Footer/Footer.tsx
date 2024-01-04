@@ -15,7 +15,7 @@ export default function Footer() {
       }}
       variant="h6"
     >
-      ErnAbr &copy; 2023 All Rights Reserved.
+      ErnAbr &copy; 2024 All Rights Reserved.
     </Typography>
   );
 }
