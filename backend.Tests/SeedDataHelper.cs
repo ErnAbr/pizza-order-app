@@ -1,16 +1,18 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using backend.Data;
 using backend.Entities;
 
-namespace backend.Data
+namespace backend.Tests
 {
-    public static class DbInitializer
+    public class SeedDataHelper
     {
-        public static void Initialize(PizzaContext context)
+        public static void SeedDatabase(PizzaContext context)
         {
-            context.Database.EnsureCreated();
-
-            if (!context.Toppings.Any())
-            {
-                var toppings = new List<Topping>
+            context.Toppings.AddRange(
+                new List<Topping>
                 {
                     new() { ToppingName = "Pepperoni" },
                     new() { ToppingName = "Mushrooms" },
@@ -20,23 +22,16 @@ namespace backend.Data
                     new() { ToppingName = "Black Olives" },
                     new() { ToppingName = "Pineapple" },
                     new() { ToppingName = "Bacon" },
-                };
-
-                context.Toppings.AddRange(toppings);
-            }
-
-            if (!context.PizzaSizes.Any())
-            {
-                var pizzaSizes = new List<PizzaSize>
+                }
+            );
+            context.PizzaSizes.AddRange(
+                    new List<PizzaSize>
                 {
                     new() { SizeName= "small", SizePrice = 8 },
                     new() { SizeName= "medium", SizePrice = 10 },
                     new() { SizeName= "large", SizePrice = 12 },
-                };
-
-                context.PizzaSizes.AddRange(pizzaSizes);
-            }
-
+                }
+            );
             context.SaveChanges();
         }
     }

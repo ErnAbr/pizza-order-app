@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs;
 using backend.Entities;
@@ -26,7 +22,7 @@ namespace backend.Controllers
             var toppings = await _context.Toppings.ToListAsync();
             var sizes = await _context.PizzaSizes.ToListAsync();
 
-            var result = new
+            var result = new PizzaDataDto
             {
                 Toppings = toppings,
                 Sizes = sizes
