@@ -34,7 +34,21 @@ namespace backend.Controllers
         [HttpPost("place-order")]
         public async Task<ActionResult> PlaceOrder(PizzaOrderDto orderDto)
         {
+            if (orderDto == null)
+            {
+                return BadRequest("Order data is required.");
+            }
+            if (orderDto.UserName == null || orderDto.PizzaSizeId == null || orderDto.ToppingIds == null)
+            {
+                return BadRequest("Order information is incomplete.");
+            }
+
             var pizzaSize = await _context.PizzaSizes.FindAsync(orderDto.PizzaSizeId);
+
+            if (pizzaSize == null)
+            {
+                return NotFound($"Pizza with ID {orderDto.PizzaSizeId} not found.");
+            }
 
             var selectedToppings = new List<OrderTopping>();
             foreach (var toppingId in orderDto.ToppingIds)
