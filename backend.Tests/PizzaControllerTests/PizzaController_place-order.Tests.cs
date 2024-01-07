@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs;
+using backend.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
 namespace backend.Tests.PizzaControllerTests 
 {
     public class PizzaController_placeOrderTests : SharedContext
-    {
+    { 
         [Fact]
         public async Task PlaceOrder_Should_Return_Ok_If_Valid_Data()
         {
@@ -54,6 +56,22 @@ namespace backend.Tests.PizzaControllerTests
 
             Assert.IsType<NotFoundObjectResult>(result);
         }
+
+        [Fact]
+        public async Task PlaceOrder_Should_Return_BadRequest_If_MoreThanSix_Toppings()
+        {
+            var orderDto = new PizzaOrderDto
+            {
+                UserName = "Test",
+                PizzaSizeId = 3,
+                ToppingIds = new List<int> { 1, 1, 1, 1, 1, 1, 1 },
+            };
+
+            var result = await _controller.PlaceOrder(orderDto);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
         [Fact]
         public async Task PlaceOrder_Should_Return_BadRequest_If_PizzaOrderDto_Is_Invalid()
         {
@@ -67,17 +85,5 @@ namespace backend.Tests.PizzaControllerTests
             var result = await _controller.PlaceOrder(orderDto);
             Assert.IsType<BadRequestObjectResult>(result);
         }
-
-        // [Fact]
-        // public async Task PlaceOrder_Should_Handle_Exception_On_Save()
-        // {
-        //     // Test code for handling exceptions during database save...
-        // }
-
-        // [Fact]
-        // public async Task PlaceOrder_Should_Calculate_Price_Correctly()
-        // {
-        //     // Test code for verifying price calculation...
-        // }
     }
 }
