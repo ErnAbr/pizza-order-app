@@ -51,6 +51,7 @@ namespace backend.Controllers
             }
 
             var selectedToppings = new List<OrderTopping>();
+            
             foreach (var toppingId in orderDto.ToppingIds)
             {
                 var topping = await _context.Toppings.FindAsync(toppingId);
@@ -62,6 +63,11 @@ namespace backend.Controllers
                 {
                     return NotFound($"Topping with ID {toppingId} not found.");
                 }
+            }
+
+            if (selectedToppings.Count > 6)
+            {
+                return BadRequest("Too Many Toppings Selected");
             }
 
             decimal totalPrice = CalculatePrice(orderDto.ToppingIds, pizzaSize.SizePrice);
@@ -115,11 +121,39 @@ namespace backend.Controllers
         }
 
         [HttpPost("calculate-price")]
-        public async Task<decimal> ReturnPrice(PriceCalculationDto priceCalculationDto)
+        public async Task<IActionResult> ReturnPrice(PriceCalculationDto priceCalculationDto)
         {
+            if (priceCalculationDto == null)
+            {
+                return BadRequest("No Calculation Data Provided");
+            }
+
+            if (priceCalculationDto.PizzaSizeId <= 0 || priceCalculationDto.PizzaSizeId > 3)
+            {
+                return BadRequest("Invalid pizza size ID.");
+            }
+
+            if (priceCalculationDto.ToppingIds != null && priceCalculationDto.ToppingIds.Any(id => id < 1 || id > 8))
+            {
+                return BadRequest("Topping Does Not Exist");
+            }
+
+            if (priceCalculationDto.ToppingIds != null && priceCalculationDto.ToppingIds.Count > 6)
+            {
+                return BadRequest("Too Many Toppings Selected");
+            }
+
             var pizzaSize = await _context.PizzaSizes.FindAsync(priceCalculationDto.PizzaSizeId);
-            var calculatedPrice = CalculatePrice(priceCalculationDto.ToppingIds, pizzaSize.SizePrice);
-            return await Task.FromResult(calculatedPrice);
+            
+            if (pizzaSize == null)
+            {
+                return BadRequest("Invalid Pizza Size");
+            }
+
+            var toppings = priceCalculationDto.ToppingIds ?? new List<int>();
+
+            var calculatedPrice = CalculatePrice(toppings, pizzaSize.SizePrice);
+            return Ok(calculatedPrice);
         }
 
         private static decimal CalculatePrice(List<int> toppingIds, int pizzaSize)

@@ -17,7 +17,7 @@ namespace backend.Tests
         public SharedContext()
         {
             _dbOptions = new DbContextOptionsBuilder<PizzaContext>()
-                .UseInMemoryDatabase("TestDatabase")
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
             _context = new PizzaContext(_dbOptions);
