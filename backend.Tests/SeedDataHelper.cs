@@ -25,7 +25,7 @@ namespace backend.Tests
                 }
             );
             context.PizzaSizes.AddRange(
-                    new List<PizzaSize>
+                new List<PizzaSize>
                 {
                     new() { SizeName= "small", SizePrice = 8 },
                     new() { SizeName= "medium", SizePrice = 10 },
@@ -34,5 +34,6 @@ namespace backend.Tests
             );
             context.SaveChanges();
         }
+        
     }
 }
