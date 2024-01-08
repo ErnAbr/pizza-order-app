@@ -117,7 +117,7 @@ namespace backend.Controllers
 
             if (order == null)
             {
-                return NotFound();
+                return NotFound("Order Not Found");
             }
 
             _context.Orders.Remove(order);
