@@ -8,6 +8,7 @@ namespace backend.Tests.PizzaControllerTests
     {
         [Theory]
         [InlineData(new int[] { 1, 1, 2, 2 }, 1, 10.8)]
+        [InlineData(new int[] { 1, 1, 2, 2, 3, 6 }, 2, 14.4)]
         [InlineData(new int[] { 1, 1, 2, 2, 2 }, 3, 15.3)]
         public async void CalculatePrice_Should_Calculate_Correctly(int[] toppingIdsArray, int pizzaSize, decimal expectedPrice)
         {
