@@ -1,4 +1,3 @@
-using backend.Controllers;
 using backend.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
@@ -35,7 +34,7 @@ namespace backend.Tests.PizzaControllerTests
                 ToppingIds = new List<int> { 1, 2 }
             };
 
-            var result = await _controller.ReturnPrice(dto);
+            var result = await _controller.ReturnPrice(null);
 
             Assert.IsType<BadRequestObjectResult>(result);
         }

@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.DTOs;
-using backend.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
@@ -82,7 +76,7 @@ namespace backend.Tests.PizzaControllerTests
                 ToppingIds = null,
             };
 
-            var result = await _controller.PlaceOrder(orderDto);
+            var result = await _controller.PlaceOrder(null);
             Assert.IsType<BadRequestObjectResult>(result);
         }
     }

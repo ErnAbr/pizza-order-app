@@ -34,11 +34,7 @@ namespace backend.Controllers
         [HttpPost("place-order")]
         public async Task<ActionResult> PlaceOrder(PizzaOrderDto orderDto)
         {
-            if (orderDto == null)
-            {
-                return BadRequest("Order data is required.");
-            }
-            if (orderDto.UserName == null || orderDto.PizzaSizeId == null || orderDto.ToppingIds == null)
+            if (orderDto?.UserName == null || orderDto?.PizzaSizeId == null || orderDto?.ToppingIds == null)
             {
                 return BadRequest("Order information is incomplete.");
             }
@@ -89,6 +85,11 @@ namespace backend.Controllers
         [HttpGet("get-order-details/{userName}")]
         public async Task<IActionResult> GetOrderDetails(string userName)
         {
+            if (userName == null)
+            {
+                return BadRequest("No Username Provided");
+            }
+
             var orders = await _context.Orders
                                     .Where(order => order.UserName == userName)
                                     .Select(order => new OrderDto
@@ -101,6 +102,11 @@ namespace backend.Controllers
                                     })
                                     .ToListAsync();
 
+            if (orders.Count == 0)
+            {
+                return NotFound("Orders not Found");
+            }
+
             return Ok(orders);  
         }
 
@@ -111,7 +117,7 @@ namespace backend.Controllers
 
             if (order == null)
             {
-            return NotFound();
+                return NotFound("Order Not Found");
             }
 
             _context.Orders.Remove(order);
@@ -123,14 +129,14 @@ namespace backend.Controllers
         [HttpPost("calculate-price")]
         public async Task<IActionResult> ReturnPrice(PriceCalculationDto priceCalculationDto)
         {
-            if (priceCalculationDto == null)
+            if (priceCalculationDto?.ToppingIds == null || priceCalculationDto?.PizzaSizeId == null)
             {
                 return BadRequest("No Calculation Data Provided");
             }
 
             if (priceCalculationDto.PizzaSizeId <= 0 || priceCalculationDto.PizzaSizeId > 3)
             {
-                return BadRequest("Invalid pizza size ID.");
+                return BadRequest("Pizza Size Does Not Exist.");
             }
 
             if (priceCalculationDto.ToppingIds != null && priceCalculationDto.ToppingIds.Any(id => id < 1 || id > 8))
@@ -144,11 +150,6 @@ namespace backend.Controllers
             }
 
             var pizzaSize = await _context.PizzaSizes.FindAsync(priceCalculationDto.PizzaSizeId);
-            
-            if (pizzaSize == null)
-            {
-                return BadRequest("Invalid Pizza Size");
-            }
 
             var toppings = priceCalculationDto.ToppingIds ?? new List<int>();
 
