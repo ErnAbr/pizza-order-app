@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  TextField,
-  Typography,
-  TypographyProps,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, Container, TextField, Typography, TypographyProps, useMediaQuery, useTheme } from "@mui/material";
 import { useContext, useState } from "react";
 import { LoginContext } from "../context/LoginContext";
 import { useNavigate } from "react-router-dom";
@@ -29,15 +20,13 @@ export default function Login() {
   };
 
   const theme = useTheme();
-  const Xs = useMediaQuery(theme.breakpoints.down("sm"));
-  const Sm = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const xs = useMediaQuery(theme.breakpoints.down("sm"));
+  const sm = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   type TypographyVariant = TypographyProps["variant"];
   let variant: TypographyVariant = "h3";
 
-  variant = Xs ? "h6" : Sm ? "h4" : "h3";
-  const textFieldWidth = Xs ? "70vw" : Sm ? "50vw" : "33vw";
-  const buttonWidth = Xs ? "60vw" : Sm ? "30vw" : "15vw";
+  variant = xs ? "h6" : sm ? "h4" : "h3";
 
   return (
     <Container
@@ -59,14 +48,10 @@ export default function Login() {
           Please Enter Your Name
         </Typography>
       )}
-      <Box
-        sx={{ display: "flex", flexDirection: "column", width: "50vw" }}
-        component="form"
-        onSubmit={handleSubmit}
-      >
+      <Box sx={{ display: "flex", flexDirection: "column", width: "50vw" }} component="form" onSubmit={handleSubmit}>
         <TextField
           required
-          sx={{ width: textFieldWidth, alignSelf: "center" }}
+          sx={{ width: { xs: "70vw", sm: "50vw", md: "33vw" }, alignSelf: "center" }}
           label="Your Name"
           name="username"
           id="username"
@@ -77,7 +62,7 @@ export default function Login() {
           disabled={isUser != null}
           sx={{
             mt: 2,
-            width: buttonWidth,
+            width: { xs: "60vw", sm: "30vw", md: "15vw" },
             height: "50px",
             alignSelf: "center",
           }}
